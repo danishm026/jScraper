@@ -1,11 +1,12 @@
 package com.arc.jScraper.pages;
 
-import static org.junit.Assert.assertEquals;
-
 import org.jsoup.nodes.Document;
 import org.junit.Test;
 
+import static org.junit.Assert.*;
 import static org.mockito.Mockito.*;
+
+import java.io.IOException;
 
 public class PageTest {
 	@Test
@@ -24,5 +25,15 @@ public class PageTest {
 		page.setDocument(testDocument);
 		Document getterDocument = page.getDocument();
 		assertEquals(testDocument, getterDocument);
+	}
+	
+	@Test
+	public void retrieveDocumentSuccessTest() throws IOException{
+		String testUrl = "http://www.celebwallpaper.org/";
+		Page page = new Page();
+		page.setUrl(testUrl);
+		assertNull(page.getDocument());
+		page.retrieveDocument();
+		assertNotNull(page.getDocument());
 	}
 }
