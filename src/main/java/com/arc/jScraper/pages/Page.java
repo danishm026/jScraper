@@ -4,8 +4,6 @@ import java.io.IOException;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class Page {
 	private String url;
@@ -27,17 +25,11 @@ public class Page {
 		this.document = document;
 	}
 	
-	public void retriveDocument() {
+	public void retrieveDocument() throws IOException{
 		final int MAX_TRIES = 5;
 		int tries = 0;
 		while(this.document == null && tries < MAX_TRIES) {
-			try{
 				this.document = Jsoup.connect(url).get();
-			}catch(IOException ioe) {
-				tries++;
-				Logger logger = LoggerFactory.getLogger(getClass());
-				logger.error("Error retriveing page: {}", url);
-			}
 		}
 	}
 }
