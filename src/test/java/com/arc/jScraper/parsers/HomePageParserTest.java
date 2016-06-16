@@ -1,4 +1,4 @@
-package jScraper;
+package com.arc.jScraper.parsers;
 
 import java.io.IOException;
 
@@ -6,7 +6,6 @@ import static org.junit.Assert.*;
 
 import org.jsoup.nodes.Document;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
@@ -21,13 +20,6 @@ import com.arc.jScraper.parsers.HomePageParser;
 public class HomePageParserTest {
 	@Autowired
 	private HomePageParser parser;
-	
-	@Before
-	public void setUp() {
-		String baseUrl = "http://www.celebwallpaper.org/";
-		assertNotNull(parser);
-		assertEquals(baseUrl, parser.getUrl());
-	}
 	
 	@Test
 	public void getAndSetUrlTest() {
