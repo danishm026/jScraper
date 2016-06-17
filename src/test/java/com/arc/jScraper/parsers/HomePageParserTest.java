@@ -4,11 +4,8 @@ import java.io.IOException;
 
 import static org.junit.Assert.*;
 
-import org.jsoup.nodes.Document;
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -20,23 +17,6 @@ import com.arc.jScraper.parsers.HomePageParser;
 public class HomePageParserTest {
 	@Autowired
 	private HomePageParser parser;
-	
-	@Test
-	public void getAndSetUrlTest() {
-		HomePageParser parser = new HomePageParser();
-		String testUrl = "http://www.google.co.in/";
-		parser.setUrl(testUrl);
-		assertEquals(testUrl, parser.getUrl());
-	}
-	
-	@Test
-	public void getAndSetDocument() {
-		HomePageParser parser = new HomePageParser();
-		assertNull(parser.getDocument());
-		Document document = Mockito.mock(Document.class);
-		parser.setDocument(document);
-		assertEquals(document, parser.getDocument());		
-	}
 	
 	@Test
 	public void getCategoryLinkTest() throws IOException{
