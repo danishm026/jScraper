@@ -32,6 +32,7 @@ public class ModelPageParser extends Parser {
 			if(link.text().contains("Last page")) {
 				String url = link.attr("abs:href");
 				numberOfPages = parseUrlForNumberOfPages(new URL(url));
+				break;
 			}
 		}
 		return numberOfPages;
@@ -45,6 +46,7 @@ public class ModelPageParser extends Parser {
 				String text = link.text();
 				List<String> imageRange = getIntsInString(text);
 				startingImageNumber = Integer.parseInt(imageRange.get(0));
+				break;
 			}
 		}
 		return startingImageNumber;
@@ -58,6 +60,7 @@ public class ModelPageParser extends Parser {
 				String text = link.text();
 				List<String> imageRange = getIntsInString(text);
 				lastImageNumber = Integer.parseInt(imageRange.get(1));
+				break;
 			}
 		}
 		return lastImageNumber;
@@ -83,7 +86,6 @@ public class ModelPageParser extends Parser {
 			if(link.hasAttr("itemprop") && link.attr("itemprop").equals("contentURL")) {
 				String linkToImagePage = link.attr("abs:href");
 				imagePageLinkList.add(linkToImagePage);
-				System.out.println(linkToImagePage);
 			}
 		}
 		return imagePageLinkList;
