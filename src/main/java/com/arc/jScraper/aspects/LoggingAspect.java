@@ -13,7 +13,7 @@ import com.arc.jScraper.parsers.Parser;
 public class LoggingAspect {
 	private static final Logger logger = LoggerFactory.getLogger(LoggingAspect.class);
 	
-	@AfterThrowing(pointcut="getCategoryLink() || getModelBasePage() || allPublicMethodsOfModelPageParser()")
+	@AfterThrowing(pointcut="getCategoryLink() || getModelBasePage() || allPublicMethodsOfModelPageParser() || allPublicMethodsOfImagePageParser()")
 	public void logRetrievalFailure(JoinPoint joinPoint) {
 		Parser parser = (Parser) joinPoint.getTarget();
 		logger.error("Error Retrieving URL: {}", parser.getUrl());
@@ -27,4 +27,7 @@ public class LoggingAspect {
 	
 	@Pointcut("execution(public * com.arc.jScraper.parsers.ModelPageParser.*())")
 	public void allPublicMethodsOfModelPageParser() {}
+	
+	@Pointcut("execution(public * com.arc.jScraper.parsers.ImagePageParser.*())")
+	public void allPublicMethodsOfImagePageParser(){}
 }
