@@ -26,7 +26,7 @@ public class Parser {
 	}
 	
 	public Document retrieveDocument() throws IOException{
-		if(document == null) {
+		if(document == null || document.baseUri().equals(url) == false) {
 			document = Jsoup.connect(url).timeout(10*1000).get();
 		}
 		return document;
