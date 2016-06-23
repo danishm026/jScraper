@@ -85,7 +85,7 @@ public class ModelPageParserWrapper {
 			ModelPage page = new ModelPage();
 			parser.setUrl(modelPageUrl);
 			try {
-				page.setPageNUmber(currentPageNumber);
+				page.setPageNumber(currentPageNumber);
 				
 				int startingImageNumber = parser.getStartingImageNumber();
 				page.setStartingImageNumber(startingImageNumber);
