@@ -15,5 +15,17 @@
     	<property name="url" value="http://www.celebwallpaper.org/" />
     </bean>    
     
+    <bean id="categoryPageParser" class="com.arc.jScraper.parsers.CategoryPageParser" />
+    
+    <bean id="modelPageParser" class="com.arc.jScraper.parsers.ModelPageParser" />
+    
+    <bean id="imagePageParser" class="com.arc.jScraper.parsers.ImagePageParser" />
+    
+    <bean id="modelPageParserWrapper" class="com.arc.jScraper.parsers.ModelPageParserWrapper" />
+    
     <bean id="loggingAspect" class="com.arc.jScraper.aspects.LoggingAspect" />
+    
+    <bean id="scraper" class="com.arc.jScraper.parsers.Scraper" />
+    
+    <bean id="model" class="com.arc.jScraperDao.dto.Model" scope="prototype"/>
 </beans>
