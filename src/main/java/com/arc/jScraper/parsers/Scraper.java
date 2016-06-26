@@ -22,16 +22,6 @@ public class Scraper {
 	private ModelPageParserWrapper modelPageParserWrapper;
 	@Autowired
 	private ImagePageParser imagePageParser;
-	@Autowired
-	private Model model;
-
-	public void setModel(Model model) {
-		this.model = model;
-	}
-
-	public Model getModel() {
-		return model;
-	}
 
 	public String getName() {
 		return name;
@@ -125,6 +115,7 @@ public class Scraper {
 	}
 
 	public Model getModelObject() {
+		Model model = new Model();
 		model.setName(name);
 
 		String categoryPageLink = getCategoryLink(name);
