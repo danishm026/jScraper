@@ -41,7 +41,7 @@ public class ModelPageParserWrapper {
 		this.baseUrl = baseUrl;
 	}
 
-	private List<String> getModelPageUrls(int startPage, int endPage) {
+	public List<String> getModelPageUrls(int startPage, int endPage) {
 		List<String> modelPageUrls = new ArrayList<String>();
 		int numberOfPages = 0;
 		try {
