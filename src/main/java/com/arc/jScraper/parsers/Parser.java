@@ -1,34 +1,13 @@
 package com.arc.jScraper.parsers;
 
-import java.io.IOException;
-
-import org.jsoup.Jsoup;
+import lombok.Getter;
+import lombok.Setter;
 import org.jsoup.nodes.Document;
 
-public class Parser {
-	private String url;
-	private Document document;
-	
-	public String getUrl() {
-		return url;
-	}
-	
-	public void setUrl(String url) {
-		this.url = url;
-	}
-	
-	public Document getDocument() {
-		return document;
-	}
+public abstract class Parser {
+	@Getter
+	@Setter
+	protected Document document;
 
-	public void setDocument(Document document) {
-		this.document = document;
-	}
-	
-	public Document retrieveDocument() throws IOException{
-		if(document == null || document.baseUri().equals(url) == false) {
-			document = Jsoup.connect(url).timeout(10*1000).get();
-		}
-		return document;
-	}
+	public abstract <T> T parse();
 }

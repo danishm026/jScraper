@@ -1,93 +1,83 @@
 package com.arc.jScraper.parsers;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import com.arc.jScraper.constants.Constants;
+import com.arc.jScraper.util.StringUtil;
+import com.arc.jScraper.util.URLHelper;
+import com.arc.jScraperDao.dto.application.ImageData;
+import com.arc.jScraperDao.dto.application.ModelPage;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class ModelPageParser extends Parser {	
-	
-	private int parseUrlForNumberOfPages(URL url) {
-		int numberOfPages;
-		String query = url.getQuery();
-		numberOfPages = Integer.parseInt(query.split("=")[1]);
-		return numberOfPages;
-	}
-	
-	private List<String> getIntsInString(String str) {
-		List<String> imageRange = new ArrayList<String>();
-		str = str.replaceAll("[^0-9]+", " ");	
-		imageRange = Arrays.asList(str.trim().split(" "));
-		return imageRange;
-	}
-	
-	public int getNumberOfPages() throws IOException {
+import java.util.ArrayList;
+import java.util.List;
+
+public class ModelPageParser extends Parser {
+    private static final String PREVIOUS_NEXT_ANCHOR = "a.prevnext";
+    private static final String LAST_PAGE_TEXT = "Last page";
+    private static final String PAGING_STATS = "pagingstats";
+    private static final String THUMBNAIL_URL = "thumbnailUrl";
+
+	public int getNumberOfPages() {
 		int numberOfPages = 1;
-		Elements links = retrieveDocument().select("a.prevnext");
+		Elements links = document.select(PREVIOUS_NEXT_ANCHOR);
 		for(Element link : links) {
-			if(link.text().contains("Last page")) {
-				String url = link.attr("abs:href");
-				numberOfPages = parseUrlForNumberOfPages(new URL(url));
+			if(link.text().contains(LAST_PAGE_TEXT)) {
+				String url = link.attr(Constants.ABSOLUTE_LINK);
+				numberOfPages = Integer.parseInt(URLHelper.getQueryParameter(URLHelper.getUrlFromString(url), Constants.PAGE_QUERY_PARAMETER));
 				break;
 			}
 		}
 		return numberOfPages;
 	}
-	
-	public int getStartingImageNumber() throws IOException {
+
+	public int getStartingImageNumber() {
 		int startingImageNumber = -1;
-		Elements links = retrieveDocument().getElementsByTag("div");
-		for(Element link : links) {
-			if(link.hasAttr("id") && link.attr("id").equals("pagingstats")) {
-				String text = link.text();
-				List<String> imageRange = getIntsInString(text);
-				startingImageNumber = Integer.parseInt(imageRange.get(0));
+		Elements divs = document.getElementsByTag(Constants.DIV_TAG);
+		for(Element div : divs) {
+			if(div.hasAttr(Constants.ID) && div.attr(Constants.ID).equals(PAGING_STATS)) {
+				startingImageNumber = StringUtil.getIntegersInString(div.text()).get(0);
 				break;
 			}
 		}
 		return startingImageNumber;
 	}
-	
-	public int getLastImageNumber() throws IOException {
+
+	public int getLastImageNumber() {
 		int lastImageNumber = -1;
-		Elements links = retrieveDocument().getElementsByTag("div");
-		for(Element link : links) {
-			if(link.hasAttr("id") && link.attr("id").equals("pagingstats")) {
-				String text = link.text();
-				List<String> imageRange = getIntsInString(text);
-				lastImageNumber = Integer.parseInt(imageRange.get(1));
+		Elements divs = document.getElementsByTag(Constants.DIV_TAG);
+		for(Element div : divs) {
+			if(div.hasAttr(Constants.ID) && div.attr(Constants.ID).equals(PAGING_STATS)) {
+				lastImageNumber = StringUtil.getIntegersInString(div.text()).get(1);
 				break;
 			}
 		}
 		return lastImageNumber;
 	}
-	
-	public List<String> getImageThumbnailsLinkList() throws IOException {
-		List<String> imageThumbnailsLinkList = new ArrayList<String>();
+
+	private List<ImageData> getImageDataList() {
+		List<ImageData> imageDataList = new ArrayList<>();
 		
-		Elements images = retrieveDocument().getElementsByTag("img");
+		Elements images = document.getElementsByTag(Constants.IMG_TAG);
 		for(Element image : images) {
-			if(image.hasAttr("itemprop") && image.attr("itemprop").equals("thumbnailUrl")) {
-				imageThumbnailsLinkList.add(image.attr("abs:src"));
+			if(image.hasAttr(Constants.ITEMPROP) && image.attr(Constants.ITEMPROP).equals(THUMBNAIL_URL)) {
+				ImageData imageData = new ImageData();
+                imageData.setThumbnailUrl(image.absUrl(Constants.IMAGE_SOURCE));
+                imageData.setImagePageURL(image.parent().attr(Constants.ABSOLUTE_LINK));
+                imageDataList.add(imageData);
 			}
 		}
-		return imageThumbnailsLinkList;
+		return imageDataList;
 	}
-	
-	public List<String> getImagePageLinkList() throws IOException {
-		List<String> imagePageLinkList = new ArrayList<String>();
-		
-		Elements links = retrieveDocument().getElementsByTag("a");
-		for(Element link : links) {
-			if(link.hasAttr("itemprop") && link.attr("itemprop").equals("contentURL")) {
-				String linkToImagePage = link.attr("abs:href");
-				imagePageLinkList.add(linkToImagePage);
-			}
-		}
-		return imagePageLinkList;
+
+	@Override
+	public ModelPage parse() {
+        ModelPage modelPage = new ModelPage();
+        modelPage.setModelPageURL(document.baseUri());
+        modelPage.setStartingImageNumber(getStartingImageNumber());
+        modelPage.setLastImageNumber(getLastImageNumber());
+        modelPage.setImageDataList(getImageDataList());
+        return modelPage;
 	}
 }

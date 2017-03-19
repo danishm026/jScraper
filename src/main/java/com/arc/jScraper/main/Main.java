@@ -1,35 +1,26 @@
 package com.arc.jScraper.main;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.arc.jScraper.endpoints.gateways.Scraper;
+import com.arc.jScraper.models.channel.ScraperChannelModel;
+import com.arc.jScraper.models.endpoints.gateways.ScraperRequest;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import com.arc.jScraper.parsers.Scraper;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class Main {
-	private static final Logger logger = LoggerFactory.getLogger(Main.class);
-	private static BufferedReader reader;
-	private static ApplicationContext applicationContext;
-	
-	public static void main(String[] args) {
-		reader = new BufferedReader(new InputStreamReader(System.in));
-		String name;
-		try {
-			name = reader.readLine();
-		} catch (IOException ioException) {
-			logger.error("Failed to read name.");
-			logger.error("Quitting.");
-			return ;
-		}
-				
-		applicationContext = new ClassPathXmlApplicationContext("applicationContext.xml");
-		Scraper scraper = applicationContext.getBean("scraper", Scraper.class);
-		
-		scraper.setName(name);
-		scraper.getModelObject();
+    public static void main(String[] args) throws Exception{
+		ApplicationContext applicationContext = new AnnotationConfigApplicationContext(com.arc.jScraper.config.ApplicationContext.class);
+        Scraper scraper = applicationContext.getBean(Scraper.class);
+        ScraperChannelModel model = scraper.scrape(new ScraperRequest("Aarika Wolf", true));
+        System.out.println(model.getModel().getBaseUrl());
+        System.out.println(model.getModel().getNumberOfPages());
+        System.out.println(model.getModel().getNumberOfImages());
+        for (int i=0; i<model.getModel().getNumberOfPages(); i++) {
+            System.out.println("Page number: " + (i + 1));
+            for (int j=0; j<model.getModel().getModelPages().get(i).getImageDataList().size(); j++) {
+                System.out.println("Thumbnail: " + model.getModel().getModelPages().get(i).getImageDataList().get(j).getThumbnailUrl()
+                + "  Image Page URL: " + model.getModel().getModelPages().get(i).getImageDataList().get(j).getImagePageURL()
+                + "Image URL: " + model.getModel().getModelPages().get(i).getImageDataList().get(j).getImageUrl() );
+            }
+        }
 	}
 }

@@ -1,20 +1,22 @@
 package com.arc.jScraper.parsers;
 
-import java.io.IOException;
-
+import com.arc.jScraper.constants.Constants;
+import com.arc.jScraper.models.page.ImagePage;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class ImagePageParser extends Parser{
-	public String getImageUrl() throws IOException {
-		String imageUrl = "";
-		Elements images = retrieveDocument().getElementsByTag("img");
+	private static final String CONTENT_URL = "contentUrl";
+
+	@Override
+	public ImagePage parse() {
+        ImagePage imagePage = new ImagePage();
+		Elements images = document.getElementsByTag(Constants.IMG_TAG);
 		for(Element image: images) {
-			if(image.hasAttr("itemprop") && image.attr("itemprop").equals("contentUrl")) {
-				imageUrl = image.attr("abs:src");
-				break;
+			if(image.hasAttr(Constants.ITEMPROP) && CONTENT_URL.equals(image.attr(Constants.ITEMPROP))) {
+				imagePage.setImageURL(image.absUrl(Constants.IMAGE_SOURCE));
 			}
 		}
-		return imageUrl;
+		return imagePage;
 	}
 }

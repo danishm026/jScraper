@@ -1,27 +1,27 @@
 package com.arc.jScraper.parsers;
 
-import java.io.IOException;
-
-import static org.junit.Assert.*;
-
-import org.junit.Test;
+import com.arc.jScraper.retriever.Retriever;
 import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.mockito.runners.MockitoJUnitRunner;
 
-import com.arc.jScraper.parsers.HomePageParser;
+import static org.junit.Assert.assertEquals;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration("classpath:homePageParserTestConfig.xml")
+@RunWith(MockitoJUnitRunner.class)
 public class HomePageParserTest {
-	@Autowired
+    private Retriever documentRetriever;
 	private HomePageParser parser;
-	
+
+	/*@Before
+    public void setDocument() throws Exception {
+        parser = new HomePageParser();
+		documentRetriever = new DocumentRetriever(Constants.HOMEPAGE_URL);
+        Document document = (Document) documentRetriever.getDocument();
+        parser.setDocument(document);
+    }
 	@Test
 	public void getCategoryLinkTest() throws IOException{
 		String expectedLink = "http://www.celebwallpaper.org/cat-a-1.htm";
-		String actulaLink = parser.getCategoryLink('A');
-		assertEquals(expectedLink, actulaLink);
-	}
+		HomePage homePage = parser.parse();
+		assertEquals(expectedLink, homePage.getStartingLetterToCategoryPageUrlMap().get('A'));
+	}*/
 }

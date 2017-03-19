@@ -11,10 +11,8 @@
     <context:annotation-config />
     <aop:aspectj-autoproxy />
     <context:component-scan base-package="com.arc.jScraper.parsers"></context:component-scan>
-    
-    <bean id="homePageParser" class="com.arc.jScraper.parsers.HomePageParser">
-    	<property name="url" value="http://www.celebwallpaper.org/" />
-    </bean>    
-    
-    <bean id="loggingAspect" class="com.arc.jScraper.aspects.LoggingAspect" />
+
+    <bean id="retriever" class="com.arc.jScraper.retriever.DocumentRetriever" />
+
+    <bean id="homePageParser" class="com.arc.jScraper.parsers.HomePageParser" />
 </beans>

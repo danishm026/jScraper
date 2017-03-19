@@ -11,8 +11,8 @@
     <context:annotation-config />
     <aop:aspectj-autoproxy />
     <context:component-scan base-package="com.arc.jScraper.parsers"></context:component-scan>
-    
-    <bean id="modelPageParser" class="com.arc.jScraper.parsers.ModelPageParser" />    
-    
-    <bean id="loggingAspect" class="com.arc.jScraper.aspects.LoggingAspect" />
+
+    <bean id="retriever" class="com.arc.jScraper.retriever.DocumentRetriever" />
+
+    <bean id="modelPageParser" class="com.arc.jScraper.parsers.ModelPageParser" />
 </beans>
