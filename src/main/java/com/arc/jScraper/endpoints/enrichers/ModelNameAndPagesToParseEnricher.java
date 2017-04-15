@@ -9,7 +9,7 @@ import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ModelNameEnricher {
+public class ModelNameAndPagesToParseEnricher {
     @ServiceActivator(inputChannel = "scraperRequestChannel", outputChannel = "homePageEnricherRouterInputChannel")
     public ScraperChannelModel setName(@NonNull final ScraperRequest request) {
         ScraperChannelModel scraperChannelModel = new ScraperChannelModel();
@@ -17,6 +17,7 @@ public class ModelNameEnricher {
         model.setName(StringUtil.sanitize(request.getName()));
         scraperChannelModel.setModel(model);
         scraperChannelModel.setScrapeImageURL(request.isScrapeImageURLIfNotAlreadyCached());
+        scraperChannelModel.setPagesToParse(request.getPagesToParse());
         return scraperChannelModel;
     }
 }

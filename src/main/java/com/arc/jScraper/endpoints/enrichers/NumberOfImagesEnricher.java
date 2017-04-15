@@ -17,7 +17,7 @@ public class NumberOfImagesEnricher {
     private final ParserHelper parserHelper;
     private final ModelPageParser modelPageParser;
 
-    @ServiceActivator(inputChannel = "numberOfImagesEnricherInputChannel", outputChannel = "modelPageEnricherRouterInputChannel")
+    @ServiceActivator(inputChannel = "numberOfImagesEnricherInputChannel", outputChannel = "pagesToParseEnricherInputChannel")
     public ScraperChannelModel setNumberOfImagse(@NonNull final ScraperChannelModel scraperChannelModel) {
         String basePageURL = scraperChannelModel.getModel().getBaseUrl();
         String numberOfPages = String.valueOf(scraperChannelModel.getModel().getNumberOfPages());

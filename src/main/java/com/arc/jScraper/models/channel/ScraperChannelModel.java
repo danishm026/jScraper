@@ -7,11 +7,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class ScraperChannelModel {
     private Model model;
+    private List<Integer> pagesToParse;
     private HomePage homePage;
     private CategoryPage categoryPage;
     private boolean scrapeImageURL;

@@ -25,8 +25,7 @@ public class ModelPageEnricher {
     public ScraperChannelModel setModelPages(@NonNull final ScraperChannelModel scraperChannelModel) {
         List<ModelPage> modelPages = new ArrayList<>();
         String baseURL = scraperChannelModel.getModel().getBaseUrl();
-        int numberOfPages = scraperChannelModel.getModel().getNumberOfPages();
-        for (int pageNumber=1; pageNumber<=numberOfPages; pageNumber++) {
+        for (int pageNumber : scraperChannelModel.getPagesToParse()) {
             String currentModelPageURL = URLHelper.addParameterToURL(baseURL, Constants.PAGE_QUERY_PARAMETER, String.valueOf(pageNumber));
             if (parserHelper.initializeParser(modelPageParser, currentModelPageURL)) {
                 ModelPage modelPage = modelPageParser.parse();

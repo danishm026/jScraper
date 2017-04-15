@@ -29,7 +29,6 @@ public class ImagePageURLEnricher {
                 ImageData currentImageData = currentModelPage.getImageDataList().get(j);
                 if (parserHelper.initializeParser(imagePageParser, currentImageData.getImagePageURL())) {
                     currentImageData.setImageUrl(((ImagePage)imagePageParser.parse()).getImageURL());
-                    System.out.println(currentImageData.getThumbnailUrl() + " " + currentImageData.getImagePageURL() + " " + currentImageData.getImageUrl());
                 }
             }
         }

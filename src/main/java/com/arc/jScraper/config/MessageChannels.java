@@ -101,4 +101,9 @@ public class MessageChannels {
     public MessageChannel imagePageURLEnricherInputChannel() {
         return new DirectChannel();
     }
+
+    @Bean
+    public MessageChannel pagesToParseEnricherInputChannel() {
+        return new DirectChannel();
+    }
 }
