@@ -29,6 +29,10 @@ public class Constants {
     public static final String QUERY_KEY_VALUE_SEPERATOR = "=";
 
     //Regex
+    public static final String WHITESPACE = "\\s+";
+    public static final String FILENAME_SEPARATOR = "_";
     public static final String FILE_EXTENSION = "\\.(?=[^\\.]+$)";
     public static final char [] ALPHABETS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+
+    public static final String OUTPUT_DIRECTORY = "output.directory";
 }
