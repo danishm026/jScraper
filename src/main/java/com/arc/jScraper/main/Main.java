@@ -54,6 +54,7 @@ public class Main {
     private void persistModel(final Model model) throws IOException {
         jdbcTemplateModelDao.save(model);
         File outputFile = new File(OUTPUT_DIRECTORY + "/" + StringUtils.join(StringUtils.split(model.getName()), Constants.FILENAME_SEPARATOR));
+        outputFile.createNewFile();
         PrintWriter printWriter = new PrintWriter(outputFile);
         printWriter.println(objectMapper.writeValueAsString(model));
         printWriter.close();
