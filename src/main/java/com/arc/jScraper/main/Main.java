@@ -6,16 +6,15 @@ import com.arc.jScraper.models.channel.ScraperChannelModel;
 import com.arc.jScraper.models.endpoints.gateways.ScraperRequest;
 import com.arc.jScraperDao.dao.hsqldb.applicationDao.JdbcTemplateModelDao;
 import com.arc.jScraperDao.dto.application.Model;
-import com.arc.jScraperDao.fileio.FileIO;
 import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class Main {
     private static final String OUTPUT_DIRECTORY = System.getProperty(Constants.OUTPUT_DIRECTORY);
@@ -53,8 +52,9 @@ public class Main {
 
     private void persistModel(final Model model) throws IOException {
         jdbcTemplateModelDao.save(model);
-        File outputFile = new File(OUTPUT_DIRECTORY + "/" + StringUtils.join(StringUtils.split(model.getName()), Constants.FILENAME_SEPARATOR));
-        outputFile.createNewFile();
+        String fileName = StringUtils.join(StringUtils.split(model.getName()), Constants.FILENAME_SEPARATOR);
+        File outputFile = new File(OUTPUT_DIRECTORY + "/" + fileName + "/" + fileName);
+        outputFile.getParentFile().mkdirs();
         PrintWriter printWriter = new PrintWriter(outputFile);
         printWriter.println(objectMapper.writeValueAsString(model));
         printWriter.close();
