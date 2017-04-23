@@ -6,6 +6,7 @@ import com.arc.jScraper.parsers.ModelPageParser;
 import com.arc.jScraper.util.ParserHelper;
 import com.arc.jScraper.util.URLHelper;
 import com.arc.jScraperDao.dto.application.ModelPage;
+import com.arc.jScraperDao.dto.db.ErrorModelPage;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,9 +32,19 @@ public class ModelPageEnricher {
                 ModelPage modelPage = modelPageParser.parse();
                 modelPage.setPageNumber(pageNumber);
                 modelPages.add(modelPage);
+            } else {
+                scraperChannelModel.getErrorModelPages().add(getErrorModelPage(scraperChannelModel.getModel().getName(), currentModelPageURL, pageNumber));
             }
         }
         scraperChannelModel.getModel().setModelPages(modelPages);
         return scraperChannelModel;
+    }
+
+    private ErrorModelPage getErrorModelPage(final String name, final String modelPageURL, final int pageNumber) {
+        ErrorModelPage errorModelPage = new ErrorModelPage();
+        errorModelPage.setName(name);
+        errorModelPage.setModelPageURL(modelPageURL);
+        errorModelPage.setPageNumber(pageNumber);
+        return errorModelPage;
     }
 }

@@ -8,6 +8,8 @@ import lombok.NonNull;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+
 @Component
 public class ModelNameAndPagesToParseEnricher {
     @ServiceActivator(inputChannel = "scraperRequestChannel", outputChannel = "homePageEnricherRouterInputChannel")
@@ -18,6 +20,8 @@ public class ModelNameAndPagesToParseEnricher {
         scraperChannelModel.setModel(model);
         scraperChannelModel.setScrapeImageURL(request.isScrapeImageURLIfNotAlreadyCached());
         scraperChannelModel.setPagesToParse(request.getPagesToParse());
+        scraperChannelModel.setErrorModelPages(new ArrayList<>());
+        scraperChannelModel.setErrorImagePages(new ArrayList<>());
         return scraperChannelModel;
     }
 }

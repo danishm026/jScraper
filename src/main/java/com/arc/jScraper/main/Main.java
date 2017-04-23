@@ -5,7 +5,11 @@ import com.arc.jScraper.endpoints.gateways.Scraper;
 import com.arc.jScraper.models.channel.ScraperChannelModel;
 import com.arc.jScraper.models.endpoints.gateways.ScraperRequest;
 import com.arc.jScraperDao.dao.hsqldb.applicationDao.JdbcTemplateModelDao;
+import com.arc.jScraperDao.dao.hsqldb.dbDao.ErrorImagePageDao;
+import com.arc.jScraperDao.dao.hsqldb.dbDao.ErrorModelPageDao;
 import com.arc.jScraperDao.dto.application.Model;
+import com.arc.jScraperDao.dto.db.ErrorImagePage;
+import com.arc.jScraperDao.dto.db.ErrorModelPage;
 import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -15,12 +19,15 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
 
 public class Main {
     private static final String OUTPUT_DIRECTORY = System.getProperty(Constants.OUTPUT_DIRECTORY);
 
     private Scraper scraper;
     private JdbcTemplateModelDao jdbcTemplateModelDao;
+    private ErrorModelPageDao errorModelPageDao;
+    private ErrorImagePageDao errorImagePageDao;
     private ObjectMapper objectMapper;
 
     public static void main(String[] args) throws IOException {
@@ -30,14 +37,18 @@ public class Main {
 	public void run(String[] args) throws IOException {
         setUp();
         String name = parseName(args);
-        ScraperChannelModel model = scraper.scrape(new ScraperRequest(name, true));
-        persistModel(model.getModel());
+        ScraperChannelModel scraperChannelModel = scraper.scrape(new ScraperRequest(name, true));
+        persistModel(scraperChannelModel.getModel());
+        persistModelPageErrors(scraperChannelModel.getErrorModelPages());
+        persistErrorImagePages(scraperChannelModel.getErrorImagePages());
     }
 
     private void setUp() {
         ApplicationContext applicationContext = new AnnotationConfigApplicationContext(com.arc.jScraper.config.ApplicationContext.class);
         scraper = applicationContext.getBean(Scraper.class);
         jdbcTemplateModelDao = applicationContext.getBean(JdbcTemplateModelDao.class);
+        errorModelPageDao = applicationContext.getBean(ErrorModelPageDao.class);
+        errorImagePageDao = applicationContext.getBean(ErrorImagePageDao.class);
         objectMapper = new ObjectMapper();
     }
 
@@ -45,9 +56,7 @@ public class Main {
         if (args.length == 0) {
             throw new IllegalArgumentException("Name must be passed while running scraper");
         }
-        else {
-            return args[0];
-        }
+        return args[0];
     }
 
     private void persistModel(final Model model) throws IOException {
@@ -58,5 +67,13 @@ public class Main {
         PrintWriter printWriter = new PrintWriter(outputFile);
         printWriter.println(objectMapper.writeValueAsString(model));
         printWriter.close();
+    }
+
+    private void persistModelPageErrors(@NonNull final List<ErrorModelPage> errorModelPages) {
+        errorModelPageDao.save(errorModelPages);
+    }
+
+    private void persistErrorImagePages(@NonNull final List<ErrorImagePage> errorImagePages) {
+        errorImagePageDao.save(errorImagePages);
     }
 }
