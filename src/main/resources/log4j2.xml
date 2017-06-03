@@ -4,14 +4,19 @@
         <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
         </Console>
-        <File name="MyFile" fileName="/home/danish/Documents/Study/Tutorials/jQuery/Output/logs/scraper_log_${date:yyyy_MM_dd_HH_mm_ss}" immediateFlush="true" append="true">
+        <RollingFile name="rollingLogFile" fileName="${sys:user.home}/.scraper/logs/application.log"
+                     filePattern="${sys:user.home}/.scraper/logs/application.log-%d{yyyy-MM-dd}-%i" immediateFlush="true" append="true">
             <PatternLayout pattern="%d{yyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
-        </File>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="1 MB" />
+            </Policies>
+            <DefaultRolloverStrategy max="4"/>
+        </RollingFile>
     </Appenders>
     <Loggers>
         <Root level="ALL">
             <AppenderRef ref="Console" />
-            <AppenderRef ref="MyFile"/>
+            <AppenderRef ref="rollingLogFile"/>
         </Root>
     </Loggers>
 </Configuration>
