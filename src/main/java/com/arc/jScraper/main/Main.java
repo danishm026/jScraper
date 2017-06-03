@@ -4,6 +4,7 @@ import com.arc.jScraper.constants.Constants;
 import com.arc.jScraper.endpoints.gateways.Scraper;
 import com.arc.jScraper.models.channel.ScraperChannelModel;
 import com.arc.jScraper.models.endpoints.gateways.ScraperRequest;
+import com.arc.jScraper.util.StringUtil;
 import com.arc.jScraperDao.dao.hsqldb.applicationDao.JdbcTemplateModelDao;
 import com.arc.jScraperDao.dao.hsqldb.dbDao.ErrorImagePageDao;
 import com.arc.jScraperDao.dao.hsqldb.dbDao.ErrorModelPageDao;
@@ -12,7 +13,11 @@ import com.arc.jScraperDao.dto.db.ErrorImagePage;
 import com.arc.jScraperDao.dto.db.ErrorModelPage;
 import lombok.NonNull;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.LoggerContext;
 import org.codehaus.jackson.map.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
@@ -31,6 +36,7 @@ public class Main {
     private ObjectMapper objectMapper;
 
     public static void main(String[] args) throws IOException {
+        java.security.Security.setProperty("networkaddress.cache.negative.ttl", "0");
         new Main().run(args);
 	}
 

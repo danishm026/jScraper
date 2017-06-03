@@ -9,6 +9,7 @@ import com.arc.jScraperDao.dto.application.ModelPage;
 import com.arc.jScraperDao.dto.db.ErrorImagePage;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
+@Slf4j
 public class ImagePageURLEnricher {
     private final ParserHelper parserHelper;
     private final Parser imagePageParser;
@@ -29,8 +31,10 @@ public class ImagePageURLEnricher {
             for (int j=0; j<currentModelPage.getImageDataList().size(); j++) {
                 ImageData currentImageData = currentModelPage.getImageDataList().get(j);
                 if (parserHelper.initializeParser(imagePageParser, currentImageData.getImagePageURL())) {
+                    log.info("Parsing image page {}", currentImageData.getImagePageURL());
                     currentImageData.setImageUrl(((ImagePage)imagePageParser.parse()).getImageURL());
                 } else {
+                    log.error("Failed to retrieve image page {}", currentImageData.getImagePageURL());
                     scraperChannelModel.getErrorImagePages().add(getErrorImagePage(scraperChannelModel.getModel().getName(),
                             currentModelPage.getModelPageURL(), currentModelPage.getPageNumber(), currentImageData.getImagePageURL()));
                 }

@@ -9,6 +9,7 @@ import com.arc.jScraperDao.dto.application.ModelPage;
 import com.arc.jScraperDao.dto.db.ErrorModelPage;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.stereotype.Component;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor(onConstructor = @__({@Autowired}))
+@Slf4j
 public class ModelPageEnricher {
     private final ParserHelper parserHelper;
     private final ModelPageParser modelPageParser;
@@ -29,10 +31,12 @@ public class ModelPageEnricher {
         for (int pageNumber : scraperChannelModel.getPagesToParse()) {
             String currentModelPageURL = URLHelper.addParameterToURL(baseURL, Constants.PAGE_QUERY_PARAMETER, String.valueOf(pageNumber));
             if (parserHelper.initializeParser(modelPageParser, currentModelPageURL)) {
+                log.info("Parsing model page {}", currentModelPageURL);
                 ModelPage modelPage = modelPageParser.parse();
                 modelPage.setPageNumber(pageNumber);
                 modelPages.add(modelPage);
             } else {
+                log.error("Failed to retrieve model page {}", currentModelPageURL);
                 scraperChannelModel.getErrorModelPages().add(getErrorModelPage(scraperChannelModel.getModel().getName(), currentModelPageURL, pageNumber));
             }
         }

@@ -1,14 +1,13 @@
 package com.arc.jScraper.constants;
 
-/**
- * Created by danish on 1/10/16.
- */
 public class Constants {
     //Connection Settings
     public static final int TIMEOUT = 10 * 1000;
+    public static final int MAX_RETRIES = 5;
+    public static final int BACK_OFF_TIME = 5 * 000;
 
     //Site Constants
-    public static final String HOMEPAGE_URL = "http://www.celebwallpaper.org/";
+    public static final String HOMEPAGE_URL = "http://www.celebwallpaper.org";
     public static final String PAGE_QUERY_PARAMETER = "page";
 
     //Tags
@@ -35,4 +34,5 @@ public class Constants {
     public static final char [] ALPHABETS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
 
     public static final String OUTPUT_DIRECTORY = "output.directory";
+    public static final String LOG_FILE = "log.filename";
 }
