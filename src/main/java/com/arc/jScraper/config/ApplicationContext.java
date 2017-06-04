@@ -8,6 +8,7 @@ import com.arc.jScraper.helpers.page.CategoryPageHelper;
 import com.arc.jScraper.retriever.DocumentRetriever;
 import com.arc.jScraper.retriever.Retriever;
 import com.arc.jScraperDao.config.DataAccessConfig;
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.context.annotation.*;
 
 @Configuration
@@ -42,5 +43,10 @@ public class ApplicationContext {
     @Bean
     public CategoryPageHelper categoryPageHelper() {
         return new CategoryPageHelper();
+    }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
     }
 }

@@ -1,5 +1,6 @@
 package com.arc.jScraper.retriever;
 
+import com.arc.jScraper.constants.Constants;
 import com.mashape.unirest.http.HttpResponse;
 import com.mashape.unirest.http.Unirest;
 import com.mashape.unirest.http.exceptions.UnirestException;
@@ -17,13 +18,7 @@ public class DocumentRetriever extends Retriever{
     @Override
     public Object getDocument(final String url) {
         Document document = null;
-        try {
-            HttpResponse<String> response = Unirest.get(url).asString();
-            document = Jsoup.parse(response.getBody());
-        } catch (UnirestException uex) {
-            logger.error("Failed to retrieve {}", url);
-        }
-        /*int tries = 0;
+        int tries = 0;
         while (document == null && tries < Constants.MAX_RETRIES) {
             try {
                 document = Jsoup.connect(url).timeout(Constants.TIMEOUT).get();
@@ -31,7 +26,7 @@ public class DocumentRetriever extends Retriever{
             tries++;
             logger.error("Error while retrieving document with URL: {}. Error {}. Retrying {} time", url, ioe.toString(), tries + 1);
            }
-        }*/
+        }
         return document;
     }
 }
